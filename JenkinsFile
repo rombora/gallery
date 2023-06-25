@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    stages {
+        stage ("clone repository") {
+            steps {
+                git "https://github.com/rombora/gallery"
+            }
+        }
+        
+        stage ("install dependencies") {
+            steps {
+                sh "npm install"
+            }
+        }
+    }
+}
