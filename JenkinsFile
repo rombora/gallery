@@ -1,42 +1,35 @@
 pipeline {
     agent any
-
     tools {
         nodejs "nodejs20"
     }
-
     stages {
-        stage ("clone repository") {
+        stage ("Clone repository") {
             steps {
                 git "https://github.com/rombora/gallery"
             }
         }
-        
-        stage ("build") {
+        stage ("Build") {
             steps {
                 sh "npm install"
             }
         }
-
-        stage ("test") {
+        stage ("Test") {
             steps {
                 sh "npm test"
             }
         }
-
-        stage ("deploy") {
+        stage ("Deploy") {
             steps {
                 withCredentials([usernameColonPassword(credentialsId: "heroku", variable: "HEROKU_CREDENTIALS")]) {
                     sh "git push https://${HEROKU_CREDENTIALS}@git.heroku.com/rocky-journey-18255.git"
                 }
             }
         }
-
-        stage ("slack ping") {
+        stage ("Ping") {
             steps {
-                slackSend message: "build successful. Build id: ${env.BUILD_ID}. App url: https://rocky-journey-18255-613c7749fdc0.herokuapp.com/"
+                slackSend message: "Build successful!\nBuild id: ${env.BUILD_ID}.\nApp url: https://rocky-journey-18255-613c7749fdc0.herokuapp.com/"
             }
         }
     }
 }
-
