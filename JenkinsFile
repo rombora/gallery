@@ -24,10 +24,19 @@ pipeline {
             }
         }
 
+        stage ("deploy") {
+            steps {
+                withCredentials([usernameColonPassword(credentialsId: "heroku", variable: "HEROKU_CREDENTIALS")]) {
+                    sh "git push https://${HEROKU_CREDENTIALS}@git.heroku.com/rocky-journey-18255.git"
+                }
+            }
+        }
+
         stage ("slack ping") {
             steps {
-                slackSend message: "build successful. Build id: ${env.BUILD_ID}. Build url: ${env.BUILD_URL}"
+                slackSend message: "build successful. Build id: ${env.BUILD_ID}. App url: https://rocky-journey-18255-613c7749fdc0.herokuapp.com/"
             }
         }
     }
 }
+
