@@ -23,5 +23,11 @@ pipeline {
                 sh "npm test"
             }
         }
+
+        stage ("slack ping") {
+            steps {
+                slackSend message: "build successful. Build id: ${env.BUILD_ID}. Build url: ${env.BUILD_URL}"
+            }
+        }
     }
 }
