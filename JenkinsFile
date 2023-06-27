@@ -3,6 +3,15 @@ pipeline {
     tools {
         nodejs "nodejs20"
     }
+    post {
+        failure {
+            emailext (
+                subject: "Pipeline Failed. Build ${env.BUILD_ID}",
+                body: "The pipeline failed!!",
+                to: "alvin.rombora@student.moringaschool.com"
+            )
+        }
+    }
     stages {
         stage ("Clone repository") {
             steps {
